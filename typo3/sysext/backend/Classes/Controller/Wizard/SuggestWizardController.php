@@ -73,6 +73,12 @@ class SuggestWizardController
             // A flex flex form field
             $flexFormTools = GeneralUtility::makeInstance(FlexFormTools::class);
             $dataStructure = $flexFormTools->parseDataStructureByIdentifier($dataStructureIdentifier);
+
+            // patch missing TCEforms array
+            if(isset($dataStructure['sheets'][$flexFormSheetName]['ROOT']['el'][$flexFormFieldName]['config']) && !isset($dataStructure['sheets'][$flexFormSheetName]['ROOT']['el'][$flexFormFieldName]['TCEforms']['config'])) {
+                $dataStructure['sheets'][$flexFormSheetName]['ROOT']['el'][$flexFormFieldName]['TCEforms']['config'] = $dataStructure['sheets'][$flexFormSheetName]['ROOT']['el'][$flexFormFieldName]['config'];
+            };
+
             if (empty($flexFormContainerFieldName)) {
                 // @todo: See if a path in pageTsConfig like "TCEForm.tableName.theContainerFieldName =" is useful and works with other pageTs, too.
                 $fieldNameInPageTsConfig = $flexFormFieldName;
